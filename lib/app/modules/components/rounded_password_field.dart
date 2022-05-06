@@ -1,10 +1,14 @@
 part of 'components.dart';
 
 class RoundedPasswordField extends StatelessWidget {
-  const RoundedPasswordField({Key? key, required this.onChanged})
-      : super(key: key);
+  const RoundedPasswordField({
+    Key? key,
+    required this.controller,
+    required this.onChanged,
+  }) : super(key: key);
 
   final Function() onChanged;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +27,7 @@ class RoundedPasswordField extends StatelessWidget {
           hintStyle: subtitleTextStyle,
           border: InputBorder.none,
         ),
+        controller: controller,
       ),
     );
   }

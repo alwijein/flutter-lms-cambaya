@@ -1,7 +1,7 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lms_cambaya/app/modules/components/components.dart';
+import 'package:flutter_lms_cambaya/app/routes/app_pages.dart';
 import 'package:flutter_lms_cambaya/config/config.dart';
 import 'package:flutter_lms_cambaya/constants/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,6 +14,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -28,27 +29,35 @@ class HomeView extends GetView<HomeController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Hi, Jein 👋',
+                          "Hi, ${controller.userModel.name} 👋",
                           style: primaryTextStyle.copyWith(
-                              fontWeight: bold, fontSize: 28),
+                              fontWeight: bold, fontSize: 24),
                         ),
                         Text(
                           'Ayo mulai belajar',
                           style: subtitleTextStyle.copyWith(
-                              fontWeight: medium, fontSize: 20),
+                              fontWeight: medium, fontSize: 18),
                         ),
                       ],
                     ),
                     Spacer(),
-                    Container(
-                      height: getPropertionateScreenWidht(45),
-                      width: getPropertionateScreenWidht(45),
-                      decoration: BoxDecoration(
-                        color: kAlert,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: SvgPicture.asset('assets/icons/logout_icon.svg'),
+                    GestureDetector(
+                      onTap: () async {
+                        if (await controller.logout()) {
+                          Get.offAndToNamed(Routes.LOGIN);
+                        }
+                      },
+                      child: Container(
+                        height: getPropertionateScreenWidht(45),
+                        width: getPropertionateScreenWidht(45),
+                        decoration: BoxDecoration(
+                          color: kAlert,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child:
+                              SvgPicture.asset('assets/icons/logout_icon.svg'),
+                        ),
                       ),
                     ),
                     SizedBox(

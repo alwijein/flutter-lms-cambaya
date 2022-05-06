@@ -7,12 +7,14 @@ class RoundedInputField extends StatelessWidget {
     required this.press,
     this.isWrap = false,
     this.sizeWidth,
+    required this.controller,
   }) : super(key: key);
 
   final String hintText;
   final Function() press;
   final bool isWrap;
   final double? sizeWidth;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,7 @@ class RoundedInputField extends StatelessWidget {
           hintText: hintText,
           hintStyle: subtitleTextStyle,
         ),
+        controller: controller,
       ),
     );
   }
