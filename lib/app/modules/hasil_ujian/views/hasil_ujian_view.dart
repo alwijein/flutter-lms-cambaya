@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_lms_cambaya/app/data/models/nilai_ujian_model.dart';
 import 'package:flutter_lms_cambaya/config/config.dart';
 import 'package:flutter_lms_cambaya/constants/constants.dart';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../controllers/hasil_ujian_controller.dart';
 
@@ -19,11 +21,25 @@ class HasilUjianView extends GetView<HasilUjianController> {
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.all(defaultPadding),
-            child: Column(
-              children: [
-                ExpansionCard(),
-              ],
-            ),
+            child: FutureBuilder<List<NilaiUjianModel>>(
+                future: controller.getData(),
+                builder: (_, data) {
+                  if (data.hasData) {
+                    return ListView.builder(
+                      itemCount: data.data?.length ?? 0,
+                      itemBuilder: (_, count) {
+                        NilaiUjianModel nilaiUjianModel = data.data![count];
+                        return ExpansionCard(
+                          nilaiUjianModel: nilaiUjianModel,
+                        );
+                      },
+                    );
+                  }
+                  return Center(
+                      child: CircularProgressIndicator(
+                    color: kPrimaryColor,
+                  ));
+                }),
           ),
         ));
   }
@@ -32,8 +48,10 @@ class HasilUjianView extends GetView<HasilUjianController> {
 class ExpansionCard extends StatelessWidget {
   const ExpansionCard({
     Key? key,
+    required this.nilaiUjianModel,
   }) : super(key: key);
 
+  final NilaiUjianModel nilaiUjianModel;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -56,7 +74,8 @@ class ExpansionCard extends StatelessWidget {
           horizontal: getPropertionateScreenWidht(16),
           vertical: getPropertionateScreenWidht(5),
         ),
-        title: Text('Matematika'),
+        title: Text(
+            nilaiUjianModel.pelajaran?.mataPelajaran.toString() ?? 'Erorr'),
         trailing: Icon(Icons.arrow_drop_down),
         onExpansionChanged: (value) {},
         children: [
@@ -77,7 +96,7 @@ class ExpansionCard extends StatelessWidget {
               Expanded(
                 flex: 5,
                 child: Text(
-                  'Sutono',
+                  nilaiUjianModel.guru?.nama.toString() ?? 'Error',
                   style: subtitleTextStyle.copyWith(
                     fontSize: 18,
                   ),
@@ -102,7 +121,7 @@ class ExpansionCard extends StatelessWidget {
               Expanded(
                 flex: 5,
                 child: Text(
-                  '80',
+                  nilaiUjianModel.nilai.toString(),
                   style: subtitleTextStyle.copyWith(
                     fontSize: 18,
                   ),
@@ -127,7 +146,7 @@ class ExpansionCard extends StatelessWidget {
               Expanded(
                 flex: 5,
                 child: Text(
-                  'A',
+                  nilaiUjianModel.predikat.toString(),
                   style: subtitleTextStyle.copyWith(
                     fontSize: 18,
                   ),

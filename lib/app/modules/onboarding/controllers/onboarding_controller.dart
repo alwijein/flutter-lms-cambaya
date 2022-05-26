@@ -1,5 +1,5 @@
 import 'package:flutter_lms_cambaya/app/data/models/kelas_model.dart';
-import 'package:flutter_lms_cambaya/services/services.dart';
+import 'package:flutter_lms_cambaya/app/data/services/services.dart';
 import 'package:get/get.dart';
 
 class OnboardingController extends GetxController {

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter_lms_cambaya/app/controllers/auth_controller.dart';
+import 'package:flutter_lms_cambaya/app/controllers/global_controller.dart';
 import 'package:flutter_lms_cambaya/app/data/models/user_model.dart';
-import 'package:flutter_lms_cambaya/services/services.dart';
+import 'package:flutter_lms_cambaya/app/data/services/services.dart';
+import 'package:flutter_lms_cambaya/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -11,13 +13,14 @@ class SplashController extends GetxController {
 
   UserModel user = UserModel();
 
+  GlobalController global = Get.put(GlobalController());
+
   // @override
   // void onInit() {
-
-  //   print('succes');
   //   super.onInit();
   // }
-  void onReady() async {
+
+  void onReady() {
     super.onReady();
     loading();
   }
@@ -29,8 +32,10 @@ class SplashController extends GetxController {
       print("ini kosong" + loginState.read('isLogin').toString());
     } else {
       await getUser();
+      print('today: ' + global.getDateNow().toString());
+      await global.getJadwalToday(hari: global.getDateNow());
       print(this.user.name);
-      Get.offAndToNamed('/home', arguments: this.user);
+      Get.offAndToNamed('/home', arguments: [this.user, global.jadwalModel]);
       print("ini terisi" + loginState.read('isLogin').toString());
     }
     // Get.offAndToNamed('/login');

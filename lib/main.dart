@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_lms_cambaya/theme/theme.dart';
 
@@ -9,9 +11,10 @@ import 'app/routes/app_pages.dart';
 void main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
+  // HttpOverrides.global = MyHttpOverrides();
   runApp(
     GetMaterialApp(
-      title: "Application",
+      title: "SD INPRESS CAMBAYA",
       debugShowCheckedModeBanner: false,
       theme: theme(),
       initialRoute: AppPages.INITIAL,
@@ -19,3 +22,12 @@ void main() async {
     ),
   );
 }
+
+// class MyHttpOverrides extends HttpOverrides {
+//   @override
+//   HttpClient createHttpClient(SecurityContext? context) {
+//     return super.createHttpClient(context)
+//       ..badCertificateCallback =
+//           (X509Certificate cert, String host, int port) => true;
+//   }
+// }

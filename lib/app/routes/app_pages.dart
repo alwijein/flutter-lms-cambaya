@@ -1,7 +1,11 @@
 import 'package:get/get.dart';
 
+import 'package:flutter_lms_cambaya/app/modules/chat/bindings/chat_binding.dart';
+import 'package:flutter_lms_cambaya/app/modules/chat/views/chat_view.dart';
 import 'package:flutter_lms_cambaya/app/modules/data_guru/bindings/data_guru_binding.dart';
 import 'package:flutter_lms_cambaya/app/modules/data_guru/views/data_guru_view.dart';
+import 'package:flutter_lms_cambaya/app/modules/detail_chat/bindings/detail_chat_binding.dart';
+import 'package:flutter_lms_cambaya/app/modules/detail_chat/views/detail_chat_view.dart';
 import 'package:flutter_lms_cambaya/app/modules/hasil_ujian/bindings/hasil_ujian_binding.dart';
 import 'package:flutter_lms_cambaya/app/modules/hasil_ujian/views/hasil_ujian_view.dart';
 import 'package:flutter_lms_cambaya/app/modules/home/bindings/home_binding.dart';
@@ -64,6 +68,16 @@ class AppPages {
       name: _Paths.LAPOR,
       page: () => LaporView(),
       binding: LaporBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHAT,
+      page: () => ChatView(),
+      binding: ChatBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAIL_CHAT,
+      page: () => DetailChatView(),
+      binding: DetailChatBinding(),
     ),
   ];
 }

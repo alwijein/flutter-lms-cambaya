@@ -1,4 +1,4 @@
 part of 'shared.dart';
 
-// String baseUrlName = "https://ruangnelayan.kajianislami.site/api";
-String baseUrlName = "http://192.168.1.73:8000/api";
+String baseUrlName = "https://sdinprescambayaiv.sch.id/api";
+// String baseUrlName = "http://172.23.64.1:8000/api";

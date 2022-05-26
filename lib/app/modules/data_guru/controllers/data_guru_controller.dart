@@ -1,20 +1,33 @@
+import 'package:flutter_lms_cambaya/app/data/models/guru_model.dart';
+import 'package:flutter_lms_cambaya/app/data/services/services.dart';
 import 'package:get/get.dart';
 
 class DataGuruController extends GetxController {
-  //TODO: Implement DataGuruController
-
   final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+
+  List<GuruModel> guruModel = [];
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  // }
+
+  Future<List<GuruModel>> getData() async {
+    List<GuruModel> guruModel = await GuruServices().getAll();
+    return guruModel;
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
+  Future<bool> getAll() async {
+    try {
+      print('Succcccccccccessss===========-');
+      List<GuruModel> guruModel = await GuruServices().getAll();
 
-  @override
-  void onClose() {}
-  void increment() => count.value++;
+      print("ini user na user");
+
+      this.guruModel = guruModel;
+      return true;
+    } catch (e) {
+      print("Errornya = $e");
+      return false;
+    }
+  }
 }

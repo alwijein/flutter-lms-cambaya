@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lms_cambaya/app/controllers/global_controller.dart';
 import 'package:flutter_lms_cambaya/app/modules/components/components.dart';
 import 'package:flutter_lms_cambaya/app/modules/login/controllers/login_controller.dart';
 import 'package:flutter_lms_cambaya/app/routes/app_pages.dart';
@@ -15,6 +16,8 @@ import '../controllers/onboarding_controller.dart';
 class OnboardingView extends GetView<OnboardingController> {
   final GetStorage box = GetStorage();
   final LoginController auth = Get.find();
+  final GlobalController global = Get.put(GlobalController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +37,7 @@ class OnboardingView extends GetView<OnboardingController> {
                   height: getPropertionateScreenHeight(24),
                 ),
                 Text(
-                  'Pilih Kelas Sesuai Kelas ${auth.user.name}',
+                  'Pilih Kelas Sesuai Kelas Anda',
                   style: whiteTextStyle.copyWith(
                     fontWeight: bold,
                     fontSize: 30,
@@ -64,10 +67,10 @@ class OnboardingView extends GetView<OnboardingController> {
                   press: () {
                     if (box.read('kelas').toString().isNotEmpty) {
                       print(box.read('kelas').toString());
-                      Get.offAllNamed(
-                        Routes.HOME,
-                        arguments: auth.user,
-                      );
+                      Get.offAllNamed(Routes.HOME, arguments: [
+                        auth.user,
+                        global.jadwalModel,
+                      ]);
                     } else {
                       Get.snackbar(
                         'Error',

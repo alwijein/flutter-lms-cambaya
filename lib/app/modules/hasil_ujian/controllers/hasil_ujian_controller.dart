@@ -1,20 +1,35 @@
+import 'package:flutter_lms_cambaya/app/data/models/nilai_ujian_model.dart';
+import 'package:flutter_lms_cambaya/app/data/services/services.dart';
+import 'package:flutter_lms_cambaya/app/modules/home/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
 class HasilUjianController extends GetxController {
-  //TODO: Implement HasilUjianController
+  HomeController homeController = Get.put(HomeController());
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  List<NilaiUjianModel> nilaiUjianModel = [];
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  // }
+
+  Future<List<NilaiUjianModel>> getData() async {
+    List<NilaiUjianModel> nilaiUjianModel =
+        await NilaiServices().getAll(homeController.semester.toString());
+    return nilaiUjianModel;
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
+  // Future<bool> getAll(String semester) async {
+  //   try {
+  //     print('Succcccccccccessss===========-');
+  //     List<NilaiUjianModel> nilaiUjianModel = await NilaiServices().getAll(semester);
 
-  @override
-  void onClose() {}
-  void increment() => count.value++;
+  //     print("ini user na user");
+
+  //     this.guruModel = guruModel;
+  //     return true;
+  //   } catch (e) {
+  //     print("Errornya = $e");
+  //     return false;
+  //   }
+  // }
 }

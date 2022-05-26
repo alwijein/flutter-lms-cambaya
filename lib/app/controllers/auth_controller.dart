@@ -1,5 +1,5 @@
 import 'package:flutter_lms_cambaya/app/data/models/user_model.dart';
-import 'package:flutter_lms_cambaya/services/services.dart';
+import 'package:flutter_lms_cambaya/app/data/services/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 

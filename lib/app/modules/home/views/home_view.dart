@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lms_cambaya/app/data/models/jadwal_model.dart';
 import 'package:flutter_lms_cambaya/app/modules/components/components.dart';
 import 'package:flutter_lms_cambaya/app/routes/app_pages.dart';
 import 'package:flutter_lms_cambaya/config/config.dart';
@@ -11,10 +12,10 @@ import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
+  final String checkMenu = '';
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -63,16 +64,23 @@ class HomeView extends GetView<HomeController> {
                     SizedBox(
                       width: getPropertionateScreenWidht(10),
                     ),
-                    Container(
-                      height: getPropertionateScreenWidht(45),
-                      width: getPropertionateScreenWidht(45),
-                      decoration: BoxDecoration(
-                        color: kPrimaryColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child:
-                            SvgPicture.asset('assets/icons/massage_icon.svg'),
+                    GestureDetector(
+                      onTap: () async {
+                        if (await controller.getGrubChat()) {
+                          Get.toNamed(Routes.CHAT);
+                        }
+                      },
+                      child: Container(
+                        height: getPropertionateScreenWidht(45),
+                        width: getPropertionateScreenWidht(45),
+                        decoration: BoxDecoration(
+                          color: kPrimaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child:
+                              SvgPicture.asset('assets/icons/massage_icon.svg'),
+                        ),
                       ),
                     ),
                   ],
@@ -91,8 +99,9 @@ class HomeView extends GetView<HomeController> {
                       CardMenu(
                         icon: 'assets/icons/date_icon.svg',
                         title: 'Jadwal Siswa',
-                        press: () {
-                          Get.toNamed('/jadwal-siswa');
+                        press: () async {
+                          await controller.getAllJadwal('siswa');
+                          Get.toNamed('/jadwal-siswa', arguments: 'Siswa');
                         },
                       ),
                       CardMenu(
@@ -105,7 +114,10 @@ class HomeView extends GetView<HomeController> {
                       CardMenu(
                         icon: 'assets/icons/teacher_icon.svg',
                         title: 'Jadwal Ujian',
-                        press: () {},
+                        press: () async {
+                          await controller.getAllJadwal('ujian');
+                          Get.toNamed('/jadwal-siswa', arguments: 'Ujian');
+                        },
                       ),
                       CardMenu(
                         icon: 'assets/icons/grade_icon.svg',
@@ -145,7 +157,39 @@ class HomeView extends GetView<HomeController> {
                       CardMenu(
                         icon: 'assets/icons/certificate_icon.svg',
                         title: 'Nilai Lapor',
-                        press: () {},
+                        press: () {
+                          Get.dialog(
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              color: kPrimaryColor,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: getPropertionateScreenWidht(50),
+                                  vertical: getPropertionateScreenWidht(150)),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  buildSemester(hintText: 'Semester'),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      if (await controller.getAll()) {
+                                        Get.back();
+                                        Get.toNamed('/lapor');
+                                      }
+                                    },
+                                    child: Icon(
+                                      Icons.check_circle_rounded,
+                                      color: kBackgroundColor2,
+                                      size: getPropertionateScreenWidht(70),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -163,41 +207,42 @@ class HomeView extends GetView<HomeController> {
                     ),
                     Positioned(
                       top: 100,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: getPropertionateScreenWidht(24),
-                          vertical: getPropertionateScreenWidht(50),
-                        ),
-                        height: getPropertionateScreenWidht(220),
-                        width: getPropertionateScreenWidht(326),
-                        decoration: BoxDecoration(
-                          color: kPrimaryColor,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Matematika',
-                                  style: whiteTextStyle.copyWith(
-                                    fontWeight: bold,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  '07:00 - 09:00',
-                                  style: whiteTextStyle.copyWith(
-                                    fontWeight: bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
+                      child: Obx(() => Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: getPropertionateScreenWidht(24),
+                              vertical: getPropertionateScreenWidht(50),
                             ),
-                          ],
-                        ),
-                      ),
+                            height: getPropertionateScreenWidht(220),
+                            width: getPropertionateScreenWidht(326),
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: controller.isEmpty.value == false
+                                ? ListView.builder(
+                                    itemCount: controller.jadwalModel.length,
+                                    itemBuilder: (context, index) {
+                                      JadwalModel jadwalModel =
+                                          controller.jadwalModel[index];
+                                      return JadwalItem(
+                                        mataPelajaran: jadwalModel
+                                                .pelajaran?.mataPelajaran ??
+                                            'Kosong',
+                                        jam: jadwalModel.jam ?? 'Kosong',
+                                      );
+                                    },
+                                  )
+                                : Center(
+                                    child: Text(
+                                      'Rajin Amat Libur Atuh\n😜',
+                                      textAlign: TextAlign.center,
+                                      style: whiteTextStyle.copyWith(
+                                        fontWeight: bold,
+                                        fontSize: 24,
+                                      ),
+                                    ),
+                                  ),
+                          )),
                     ),
                     Positioned(
                       top: 0,
@@ -254,11 +299,46 @@ class HomeView extends GetView<HomeController> {
                   },
                 ))
             .toList(),
-        onChanged: (value) {},
+        onChanged: (value) {
+          controller.initSemester(value.toString());
+        },
         onSaved: (value) {
+          controller.initSemester(value.toString());
           // idJenisPengerjaanIkan = selected;
         },
       ),
+    );
+  }
+}
+
+class JadwalItem extends StatelessWidget {
+  const JadwalItem({
+    Key? key,
+    required this.mataPelajaran,
+    required this.jam,
+  }) : super(key: key);
+
+  final String mataPelajaran, jam;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          mataPelajaran,
+          style: whiteTextStyle.copyWith(
+            fontWeight: bold,
+            fontSize: 18,
+          ),
+        ),
+        Text(
+          jam,
+          style: whiteTextStyle.copyWith(
+            fontWeight: bold,
+            fontSize: 16,
+          ),
+        ),
+      ],
     );
   }
 }

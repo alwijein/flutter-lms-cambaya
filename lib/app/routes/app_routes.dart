@@ -12,6 +12,8 @@ abstract class Routes {
   static const JADWAL_SISWA = _Paths.JADWAL_SISWA;
   static const HASIL_UJIAN = _Paths.HASIL_UJIAN;
   static const LAPOR = _Paths.LAPOR;
+  static const CHAT = _Paths.CHAT;
+  static const DETAIL_CHAT = _Paths.DETAIL_CHAT;
 }
 
 abstract class _Paths {
@@ -23,4 +25,6 @@ abstract class _Paths {
   static const JADWAL_SISWA = '/jadwal-siswa';
   static const HASIL_UJIAN = '/hasil-ujian';
   static const LAPOR = '/lapor';
+  static const CHAT = '/chat';
+  static const DETAIL_CHAT = '/detail-chat';
 }

@@ -5,8 +5,8 @@ import '../controllers/data_guru_controller.dart';
 class DataGuruBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<DataGuruController>(
-      () => DataGuruController(),
+    Get.put(
+      DataGuruController(),
     );
   }
 }

@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_lms_cambaya/app/data/models/jadwal_model.dart';
+import 'package:flutter_lms_cambaya/app/modules/home/controllers/home_controller.dart';
 import 'package:flutter_lms_cambaya/config/config.dart';
 import 'package:flutter_lms_cambaya/constants/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_lms_cambaya/utils/utils.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../controllers/jadwal_siswa_controller.dart';
 
 class JadwalSiswaView extends GetView<JadwalSiswaController> {
+  final HomeController homeController = Get.find();
   @override
   Widget build(BuildContext context) {
+    String status = Get.arguments;
     return Scaffold(
       body: SafeArea(
         child: SizedBox(
@@ -25,13 +31,14 @@ class JadwalSiswaView extends GetView<JadwalSiswaController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Jadwal Siswa',
+                        'Jadwal $status',
                         style: subtitleTextStyle.copyWith(
                           fontSize: 18,
                         ),
                       ),
                       Text(
-                        'Rabu, 27 April',
+                        controller.dateFormat.format(DateTime.now()).toString(),
+                        // FormatDate.formatDateBasic(DateTime.now()).toString(),
                         style: primaryTextStyle.copyWith(
                           fontSize: 20,
                           fontWeight: bold,
@@ -40,13 +47,51 @@ class JadwalSiswaView extends GetView<JadwalSiswaController> {
                       SizedBox(
                         height: getPropertionateScreenWidht(24),
                       ),
-                      Row(
-                        children: [
-                          CardDay(
-                            day: 'Senin',
-                            press: controller.onSelect,
-                          ),
-                        ],
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            CardDay(
+                              index: 1,
+                              day: 'Senin',
+                            ),
+                            SizedBox(
+                              width: getPropertionateScreenWidht(20),
+                            ),
+                            CardDay(
+                              index: 2,
+                              day: 'Selasa',
+                            ),
+                            SizedBox(
+                              width: getPropertionateScreenWidht(20),
+                            ),
+                            CardDay(
+                              index: 3,
+                              day: 'Rabu',
+                            ),
+                            SizedBox(
+                              width: getPropertionateScreenWidht(20),
+                            ),
+                            CardDay(
+                              index: 4,
+                              day: 'Kamis',
+                            ),
+                            SizedBox(
+                              width: getPropertionateScreenWidht(20),
+                            ),
+                            CardDay(
+                              index: 5,
+                              day: "Jum'at",
+                            ),
+                            SizedBox(
+                              width: getPropertionateScreenWidht(20),
+                            ),
+                            CardDay(
+                              index: 6,
+                              day: "Sabtu",
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -60,16 +105,21 @@ class JadwalSiswaView extends GetView<JadwalSiswaController> {
                   decoration: BoxDecoration(
                     color: kBackgroundColor2,
                   ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CardJadwal(),
-                          CardJadwal(),
-                        ],
+                  child: Obx(
+                    () => GridView.builder(
+                      itemCount: controller.count.value,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 5,
                       ),
-                    ],
+                      itemBuilder: (_, count) {
+                        return CardJadwal(
+                          jadwalModel: controller.jadwalAll[count],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -85,24 +135,28 @@ class CardDay extends StatelessWidget {
   const CardDay({
     Key? key,
     required this.day,
-    required this.press,
+    required this.index,
   }) : super(key: key);
 
   final String day;
-  final Function() press;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
     JadwalSiswaController controller = Get.find();
+    HomeController homeController = Get.find();
     return GestureDetector(
-      onTap: press,
+      onTap: () {
+        controller.onSelect(index);
+        controller.resetCount();
+        controller.getCount(homeController.jadwalAll);
+      },
       child: Obx(() => Container(
             height: getPropertionateScreenWidht(79),
             width: getPropertionateScreenWidht(85),
             decoration: BoxDecoration(
-              color: controller.isSelect == true
-                  ? kPrimaryColor
-                  : kBackgroundColor2,
+              color:
+                  controller.index == index ? kPrimaryColor : kBackgroundColor2,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: kSecondaryColor.withOpacity(0.4),
@@ -114,7 +168,7 @@ class CardDay extends StatelessWidget {
                 day,
                 style: primaryTextStyle.copyWith(
                   fontWeight: bold,
-                  color: controller.isSelect == true
+                  color: controller.index == index
                       ? kBackgroundColor2
                       : kPrimaryTextColor,
                   fontSize: 20,
@@ -129,8 +183,10 @@ class CardDay extends StatelessWidget {
 class CardJadwal extends StatelessWidget {
   const CardJadwal({
     Key? key,
+    required this.jadwalModel,
   }) : super(key: key);
 
+  final JadwalModel jadwalModel;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -149,20 +205,23 @@ class CardJadwal extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Matematika',
+            jadwalModel.pelajaran?.mataPelajaran ?? 'Kosong',
             style: primaryGreen.copyWith(
               fontWeight: bold,
               fontSize: 18,
             ),
           ),
           Text(
-            'Sutono',
+            (jadwalModel.tanggal != null
+                    ? jadwalModel.tanggal
+                    : jadwalModel.guru?.nama)
+                .toString(),
             style: subtitleGreen.copyWith(
               fontSize: 18,
             ),
           ),
           Text(
-            '09:00 - 10:00',
+            jadwalModel.jam ?? 'Kosong',
             style: subtitleGreen.copyWith(
               fontSize: 16,
             ),
