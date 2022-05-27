@@ -1,5 +1,5 @@
 class GrubModel {
-  int? id;
+  String? id;
   String? name;
 
   GrubModel({

@@ -5,7 +5,7 @@ class NilaiUjianModel {
   int? id;
 
   String? predikat, deskPengetahuan, deskKeterampilan;
-  int? nilai;
+  String? nilai;
   PelajaranModel? pelajaran;
 
   GuruModel? guru;

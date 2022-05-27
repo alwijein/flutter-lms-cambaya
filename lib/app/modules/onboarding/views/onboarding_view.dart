@@ -64,9 +64,10 @@ class OnboardingView extends GetView<OnboardingController> {
                   ),
                   isInfinity: false,
                   width: getPropertionateScreenWidht(200),
-                  press: () {
+                  press: () async {
                     if (box.read('kelas').toString().isNotEmpty) {
                       print(box.read('kelas').toString());
+                      await global.getJadwalToday(hari: global.getDateNow());
                       Get.offAllNamed(Routes.HOME, arguments: [
                         auth.user,
                         global.jadwalModel,

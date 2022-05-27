@@ -1,6 +1,5 @@
 class ChatModel {
-  int? id;
-  String? message, from, name, is_read;
+  String? id, message, from, name, is_read;
 
   ChatModel({
     this.id,
