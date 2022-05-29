@@ -10,7 +10,7 @@ class ChatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.DETAIL_CHAT);
+        Get.toNamed(Routes.DETAIL_CHAT, arguments: grubModel);
       },
       child: Container(
         margin: EdgeInsets.only(top: getPropertionateScreenHeight(10)),

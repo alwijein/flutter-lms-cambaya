@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class DetailChatController extends GetxController {
   List<ChatModel> chatModel = [];
 
-  Stream<List<ChatModel>> getData(int id) async* {
+  Stream<List<ChatModel>> getData(String id) async* {
     yield* Stream.periodic(Duration(seconds: 4), (_) {
       return ChatServices().showChat(id);
     }).asyncMap((event) async => await event);
@@ -14,7 +14,7 @@ class DetailChatController extends GetxController {
   }
 
   Future<bool> inputChat({
-    required int id,
+    required String id,
     required String message,
   }) async {
     try {

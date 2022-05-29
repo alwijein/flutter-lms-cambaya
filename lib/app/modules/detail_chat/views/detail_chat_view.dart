@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lms_cambaya/app/data/models/chat_model.dart';
+import 'package:flutter_lms_cambaya/app/data/models/grub_model.dart';
 import 'package:flutter_lms_cambaya/app/modules/components/components.dart';
 import 'package:flutter_lms_cambaya/app/modules/home/controllers/home_controller.dart';
 import 'package:flutter_lms_cambaya/constants/constants.dart';
@@ -14,10 +15,12 @@ class DetailChatView extends GetView<DetailChatController> {
   final HomeController homeController = Get.find();
   final TextEditingController messageController =
       TextEditingController(text: '');
+  GrubModel grubModel = Get.arguments;
   @override
   Widget build(BuildContext context) {
     handleAddMessage() async {
-      await controller.inputChat(id: 2, message: messageController.text);
+      await controller.inputChat(
+          id: grubModel.id.toString(), message: messageController.text);
     }
 
     Widget chatInput() {
@@ -68,7 +71,7 @@ class DetailChatView extends GetView<DetailChatController> {
     Widget content() {
       // return SizedBox();
       return StreamBuilder<List<ChatModel>>(
-        stream: controller.getData(2),
+        stream: controller.getData(grubModel.id.toString()),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return SingleChildScrollView(
@@ -99,7 +102,7 @@ class DetailChatView extends GetView<DetailChatController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Grub Chat'),
+        title: Text(grubModel.name.toString()),
         centerTitle: true,
         elevation: 0,
       ),

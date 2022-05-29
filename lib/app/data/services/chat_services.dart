@@ -36,7 +36,7 @@ class ChatServices {
     }
   }
 
-  Future<List<ChatModel>> showChat(int id) async {
+  Future<List<ChatModel>> showChat(String id) async {
     var url = Uri.parse("$baseUrl/chat/$id");
 
     var headers = {
@@ -68,7 +68,7 @@ class ChatServices {
   }
 
   Future inputChat({
-    required int id,
+    required String id,
     required String message,
   }) async {
     var url = Uri.parse("$baseUrl/chat/input");
