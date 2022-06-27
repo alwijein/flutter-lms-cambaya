@@ -9,7 +9,7 @@ dependencies:
   carousel_slider: 4.1.1
   cupertino_icons: ^1.0.2
   delayed_display: 2.0.0
-  dropdown_button2: 1.4.0
+  dropdown_button2: 1.6.2
   flutter:
     sdk: flutter
   flutter_svg: 1.0.3

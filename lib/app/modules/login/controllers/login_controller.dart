@@ -9,7 +9,11 @@ class LoginController extends GetxController {
 
   var isLoading = false.obs;
 
+  var isShow = true.obs;
+
   final loginState = GetStorage();
+
+  void showPass() => isShow.value = !isShow.value;
 
   Future<bool> login({
     required String email,

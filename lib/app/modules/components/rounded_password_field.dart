@@ -12,23 +12,31 @@ class RoundedPasswordField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LoginController loginController = Get.put(LoginController());
+
     return TextFieldContainer(
       isWrapSize: false,
-      child: TextField(
-        onChanged: onChanged(),
-        obscureText: true,
-        style: primaryTextStyle,
-        decoration: InputDecoration(
-          suffix: const Icon(
-            Icons.visibility,
-            color: kPrimaryColor,
-          ),
-          hintText: "Password",
-          hintStyle: subtitleTextStyle,
-          border: InputBorder.none,
-        ),
-        controller: controller,
-      ),
+      child: Obx(() => TextField(
+            obscureText: loginController.isShow.value,
+            style: primaryTextStyle,
+            decoration: InputDecoration(
+              suffix: GestureDetector(
+                onTap: () {
+                  loginController.showPass();
+                },
+                child: Icon(
+                  loginController.isShow.value
+                      ? Icons.visibility_off
+                      : Icons.visibility,
+                  color: kPrimaryColor,
+                ),
+              ),
+              hintText: "Password",
+              hintStyle: subtitleTextStyle,
+              border: InputBorder.none,
+            ),
+            controller: controller,
+          )),
     );
   }
 }
