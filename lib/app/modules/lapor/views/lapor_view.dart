@@ -20,7 +20,7 @@ class LaporView extends GetView<LaporController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lapor'),
+        title: Text('Rapor'),
         centerTitle: true,
         elevation: 0,
       ),

@@ -156,7 +156,7 @@ class HomeView extends GetView<HomeController> {
                       ),
                       CardMenu(
                         icon: 'assets/icons/certificate_icon.svg',
-                        title: 'Nilai Lapor',
+                        title: 'Nilai Rapor',
                         press: () {
                           Get.dialog(
                             Card(
